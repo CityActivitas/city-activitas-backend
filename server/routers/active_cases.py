@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends
-from supabase import Client
-from datetime import datetime, date
-from typing import Optional
-from pydantic import BaseModel
-from dependencies.auth import get_auth_dependency
+from __future__ import annotations
 
+from datetime import date, datetime
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from supabase import Client
+
+from server.dependencies.auth import get_auth_dependency
 
 router = APIRouter(
     prefix="/api/v1/cases",
@@ -14,10 +16,10 @@ router = APIRouter(
 
 # 定義請求模型
 class CaseCreate(BaseModel):
-    asset_id: Optional[int] = None  # 關聯資產 ID（選擇性）
+    asset_id: int | None = None  # 關聯資產 ID（選擇性）
     name: str  # 案件名稱
-    purpose: Optional[str] = None  # 活化目標說明
-    purpose_type_id: Optional[int] = None  # 活化目標類型 ID
+    purpose: str | None = None  # 活化目標說明
+    purpose_type_id: int | None = None  # 活化目標類型 ID
     status: str  # 案件狀態
 
 
@@ -25,32 +27,32 @@ class TaskCreate(BaseModel):
     agency_id: int  # 負責單位(執行機關)
     task_content: str  # 任務內容
     status: str  # 進度狀態
-    start_date: Optional[date] = None  # 開始執行時間
-    complete_date: Optional[date] = None  # 實際完成時間
-    due_date: Optional[date] = None  # 預期完成時間
-    note: Optional[str] = None  # 備註
+    start_date: date | None = None  # 開始執行時間
+    complete_date: date | None = None  # 實際完成時間
+    due_date: date | None = None  # 預期完成時間
+    note: str | None = None  # 備註
 
 
 class CaseUpdate(BaseModel):
-    name: Optional[str] = None  # 案件名稱
-    purpose: Optional[str] = None  # 活化目標說明
-    purpose_type_id: Optional[int] = None  # 活化目標類型 ID
-    status: Optional[str] = None  # 案件狀態
+    name: str | None = None  # 案件名稱
+    purpose: str | None = None  # 活化目標說明
+    purpose_type_id: int | None = None  # 活化目標類型 ID
+    status: str | None = None  # 案件狀態
 
 
 class TaskUpdate(BaseModel):
-    agency_id: Optional[int] = None  # 負責單位(執行機關)
-    task_content: Optional[str] = None  # 任務內容
-    status: Optional[str] = None  # 進度狀態
-    start_date: Optional[date] = None  # 開始執行時間
-    complete_date: Optional[date] = None  # 實際完成時間
-    due_date: Optional[date] = None  # 預期完成時間
-    note: Optional[str] = None  # 備註
+    agency_id: int | None = None  # 負責單位(執行機關)
+    task_content: str | None = None  # 任務內容
+    status: str | None = None  # 進度狀態
+    start_date: date | None = None  # 開始執行時間
+    complete_date: date | None = None  # 實際完成時間
+    due_date: date | None = None  # 預期完成時間
+    note: str | None = None  # 備註
 
 
 class MeetingUpdate(BaseModel):
-    meeting_date: Optional[date] = None  # 會議日期
-    content: Optional[str] = None  # 結論內容
+    meeting_date: date | None = None  # 會議日期
+    content: str | None = None  # 結論內容
 
 
 def init_router(supabase: Client) -> APIRouter:

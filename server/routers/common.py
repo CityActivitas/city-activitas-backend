@@ -1,11 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
-from supabase import Client
-from typing import Optional
+from __future__ import annotations
+
 from datetime import datetime
-from pydantic import BaseModel
-from dependencies.auth import get_auth_dependency
-from utils.error_handlers import handle_postgrest_error
+
+from fastapi import APIRouter, Depends, HTTPException
 from postgrest.exceptions import APIError
+from pydantic import BaseModel
+from supabase import Client
+
+from server.dependencies.auth import get_auth_dependency
+from server.utils.error_handlers import handle_postgrest_error
 
 router = APIRouter(prefix="/api/v1/common", tags=["共用資料"])
 
@@ -13,22 +16,22 @@ router = APIRouter(prefix="/api/v1/common", tags=["共用資料"])
 # 定義請求模型
 class AgencyCreate(BaseModel):
     name: str  # 機關名稱
-    note: Optional[str] = None  # 備註
+    note: str | None = None  # 備註
 
 
 class AgencyUpdate(BaseModel):
-    name: Optional[str] = None
-    note: Optional[str] = None
+    name: str | None = None
+    note: str | None = None
 
 
 class UsageTypeCreate(BaseModel):
     name: str  # 使用類型名稱
-    note: Optional[str] = None  # 備註
+    note: str | None = None  # 備註
 
 
 class UsageTypeUpdate(BaseModel):
-    name: Optional[str] = None
-    note: Optional[str] = None
+    name: str | None = None
+    note: str | None = None
 
 
 def init_router(supabase: Client) -> APIRouter:

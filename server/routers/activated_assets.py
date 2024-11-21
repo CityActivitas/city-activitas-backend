@@ -1,57 +1,60 @@
-from fastapi import APIRouter, HTTPException, Depends
-from supabase import Client
-from typing import Optional
-from datetime import datetime, date
+from __future__ import annotations
+
+from datetime import date, datetime
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from dependencies.auth import get_auth_dependency
+from supabase import Client
+
+from server.dependencies.auth import get_auth_dependency
 
 router = APIRouter(prefix="/api/v1/activated", tags=["已活化資產"])
 
 
 class ActivatedAssetUpdate(BaseModel):
-    year: Optional[int] = None  # 年度
-    location: Optional[str] = None  # 地點說明
-    is_supplementary: Optional[bool] = None  # 是否為補列
-    supplementary_year: Optional[int] = None  # 補列年度
-    usage_plan: Optional[str] = None  # 計畫用途
-    usage_type_id: Optional[int] = None  # 計畫用途類別
-    land_value: Optional[float] = None  # 土地公告現值
-    building_value: Optional[float] = None  # 房屋課稅現值
-    benefit_value: Optional[float] = None  # 節流效益
-    is_counted: Optional[bool] = None  # 列入計算
-    note: Optional[str] = None  # 備註
-    status: Optional[str] = None  # 狀態
-    start_date: Optional[date] = None  # 活化開始日期
-    end_date: Optional[date] = None  # 活化結束日期
+    year: int | None = None  # 年度
+    location: str | None = None  # 地點說明
+    is_supplementary: bool | None = None  # 是否為補列
+    supplementary_year: int | None = None  # 補列年度
+    usage_plan: str | None = None  # 計畫用途
+    usage_type_id: int | None = None  # 計畫用途類別
+    land_value: float | None = None  # 土地公告現值
+    building_value: float | None = None  # 房屋課稅現值
+    benefit_value: float | None = None  # 節流效益
+    is_counted: bool | None = None  # 列入計算
+    note: str | None = None  # 備註
+    status: str | None = None  # 狀態
+    start_date: date | None = None  # 活化開始日期
+    end_date: date | None = None  # 活化結束日期
 
 
 class ActivatedAssetCreate(BaseModel):
-    asset_id: Optional[int] = None
+    asset_id: int | None = None
     year: int  # 年度
-    location: Optional[str] = None  # 地點說明
+    location: str | None = None  # 地點說明
     is_supplementary: bool = False  # 是否為補列
-    supplementary_year: Optional[int] = None  # 補列年度
-    usage_plan: Optional[str] = None  # 計畫用途
-    usage_type_id: Optional[int] = None  # 計畫用途類別
-    land_value: Optional[float] = None  # 土地公告現值
-    building_value: Optional[float] = None  # 房屋課稅現值
-    benefit_value: Optional[float] = None  # 節流效益
+    supplementary_year: int | None = None  # 補列年度
+    usage_plan: str | None = None  # 計畫用途
+    usage_type_id: int | None = None  # 計畫用途類別
+    land_value: float | None = None  # 土地公告現值
+    building_value: float | None = None  # 房屋課稅現值
+    benefit_value: float | None = None  # 節流效益
     is_counted: bool  # 列入計算
-    note: Optional[str] = None  # 備註
+    note: str | None = None  # 備註
     status: str  # 狀態
     start_date: date  # 活化開始日期
-    end_date: Optional[date] = None  # 活化結束日期
+    end_date: date | None = None  # 活化結束日期
 
 
 class ActivationHistoryResponse(BaseModel):
-    asset_id: Optional[int]
-    activated_asset_id: Optional[int]
+    asset_id: int | None
+    activated_asset_id: int | None
     status: str  # 啟動、終止
     change_date: date
-    reason: Optional[str]
-    note: Optional[str]
+    reason: str | None
+    note: str | None
     created_at: datetime
-    created_by: Optional[int]
+    created_by: int | None
 
 
 def init_router(supabase: Client) -> APIRouter:
@@ -178,11 +181,11 @@ def init_router(supabase: Client) -> APIRouter:
 
     @router.get("/history")  # /api/v1/activated/history
     async def get_activation_history(
-        asset_id: Optional[int] = None,
-        activated_asset_id: Optional[int] = None,
-        status: Optional[str] = None,
-        start_date: Optional[date] = None,
-        end_date: Optional[date] = None,
+        asset_id: int | None = None,
+        activated_asset_id: int | None = None,
+        status: str | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
     ):
         try:
             # 建立基本查詢

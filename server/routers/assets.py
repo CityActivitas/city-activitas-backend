@@ -1,50 +1,53 @@
-from fastapi import APIRouter, HTTPException, Depends, status
-from pydantic import BaseModel
-from typing import Optional
+from __future__ import annotations
+
 from datetime import datetime
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from supabase import Client
-from dependencies.auth import get_auth_dependency
+
+from server.dependencies.auth import get_auth_dependency
 
 
 # 定義請求模型
 class AssetUpdate(BaseModel):
-    type: Optional[str] = None  # 資產種類：土地或建物
-    agency_id: Optional[int] = None  # 管理機關ID
-    district_id: Optional[int] = None  # 行政區ID
-    section: Optional[str] = None  # 地段
-    address: Optional[str] = None  # 地址
-    coordinates: Optional[tuple[float, float]] = None  # 定位座標
-    area_coordinates: Optional[list[tuple[float, float]]] = None  # 區域座標組
-    target_name: Optional[str] = None  # 標的名稱
-    status: Optional[str] = None  # 狀態
+    type: str | None = None  # 資產種類：土地或建物
+    agency_id: int | None = None  # 管理機關ID
+    district_id: int | None = None  # 行政區ID
+    section: str | None = None  # 地段
+    address: str | None = None  # 地址
+    coordinates: tuple[float, float] | None = None  # 定位座標
+    area_coordinates: list[tuple[float, float]] | None = None  # 區域座標組
+    target_name: str | None = None  # 標的名稱
+    status: str | None = None  # 狀態
 
 
 class LandDetailUpdate(BaseModel):
-    lot_number: Optional[str] = None  # 地號，例如：80-8、81-1
-    land_type: Optional[str] = None  # 土地種類，例如：市有土地、國有土地
-    area: Optional[float] = None  # 面積(平方公尺)，例如：7826
-    zone_type: Optional[str] = None  # 使用分區，例如：學校用地、保護區
-    land_use: Optional[str] = None  # 土地用途，例如：特定目的事業用地
-    current_status: Optional[str] = None  # 現況，例如：空置
-    vacancy_rate: Optional[int] = None  # 空置比例，例如：100
-    note: Optional[str] = None  # 備註，例如：六甲國小大丘分班(已裁併校)
+    lot_number: str | None = None  # 地號，例如：80-8、81-1
+    land_type: str | None = None  # 土地種類，例如：市有土地、國有土地
+    area: float | None = None  # 面積(平方公尺)，例如：7826
+    zone_type: str | None = None  # 使用分區，例如：學校用地、保護區
+    land_use: str | None = None  # 土地用途，例如：特定目的事業用地
+    current_status: str | None = None  # 現況，例如：空置
+    vacancy_rate: int | None = None  # 空置比例，例如：100
+    note: str | None = None  # 備註，例如：六甲國小大丘分班(已裁併校)
 
 
 class BuildingDetailUpdate(BaseModel):
-    building_number: Optional[str] = None  # 建號，例如：歸仁北段6932建號
-    building_type: Optional[str] = None  # 建物種類，例如：市有建物
-    floor_area: Optional[str] = None  # 樓地板面積，例如：2樓:3729.7 3樓:3426.2
-    zone_type: Optional[str] = None  # 使用分區，例如：住宅區、商業區
-    land_use: Optional[str] = None  # 土地用途，例如：乙種建築用地
-    current_status: Optional[str] = None  # 現況，例如：空置、部分空置
-    vacancy_rate: Optional[int] = None  # 空置比例，例如：100
-    note: Optional[str] = None  # 備註，例如：2樓空置、3樓部分空間約400坪提供給使用
+    building_number: str | None = None  # 建號，例如：歸仁北段6932建號
+    building_type: str | None = None  # 建物種類，例如：市有建物
+    floor_area: str | None = None  # 樓地板面積，例如：2樓:3729.7 3樓:3426.2
+    zone_type: str | None = None  # 使用分區，例如：住宅區、商業區
+    land_use: str | None = None  # 土地用途，例如：乙種建築用地
+    current_status: str | None = None  # 現況，例如：空置、部分空置
+    vacancy_rate: int | None = None  # 空置比例，例如：100
+    note: str | None = None  # 備註，例如：2樓空置、3樓部分空間約400坪提供給使用
 
 
 class BuildingLandDetailUpdate(BaseModel):
-    lot_number: Optional[str] = None  # 地號
-    land_type: Optional[str] = None  # 土地種類 (市有土地/國有土地/私有土地)
-    land_manager: Optional[str] = None  # 土地管理者
+    lot_number: str | None = None  # 地號
+    land_type: str | None = None  # 土地種類 (市有土地/國有土地/私有土地)
+    land_manager: str | None = None  # 土地管理者
 
 
 router = APIRouter(prefix="/api/v1/assets", tags=["資產"])

@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends, Form
+from __future__ import annotations
+
+from fastapi import APIRouter, Depends, Form, HTTPException
 from fastapi.security import HTTPBearer, OAuth2PasswordRequestForm
-from supabase import Client
 from passlib.context import CryptContext
-from pydantic import BaseModel
+from supabase import Client
 
 security = HTTPBearer()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

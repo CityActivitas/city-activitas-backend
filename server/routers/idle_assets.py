@@ -1,10 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends, status
-from pydantic import BaseModel
-from typing import Optional
+from __future__ import annotations
+
 from datetime import datetime
-from supabase import Client
-from dependencies.auth import get_auth_dependency
+
 import postgrest
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel
+from supabase import Client
+
+from server.dependencies.auth import get_auth_dependency
 
 router = APIRouter(prefix="/api/v1/idle", tags=["閒置資產"])
 
@@ -12,30 +15,30 @@ router = APIRouter(prefix="/api/v1/idle", tags=["閒置資產"])
 # 定義請求模型
 class LandDetailCreate(BaseModel):
     lot_number: str  # 地號，例如：80-8、81-1
-    land_type: Optional[str] = None  # 土地種類，例如：市有土地、國有土地
-    area: Optional[float] = None  # 面積(平方公尺)，例如：7826
-    zone_type: Optional[str] = None  # 使用分區，例如：學校用地、保護區
-    land_use: Optional[str] = None  # 土地用途，例如：特定目的事業用地
-    current_status: Optional[str] = None  # 現況，例如：空置
-    vacancy_rate: Optional[int] = None  # 空置比例，例如：100
-    note: Optional[str] = None  # 備註，例如：六甲國小大丘分班(已裁併校)
+    land_type: str | None = None  # 土地種類，例如：市有土地、國有土地
+    area: float | None = None  # 面積(平方公尺)，例如：7826
+    zone_type: str | None = None  # 使用分區，例如：學校用地、保護區
+    land_use: str | None = None  # 土地用途，例如：特定目的事業用地
+    current_status: str | None = None  # 現況，例如：空置
+    vacancy_rate: int | None = None  # 空置比例，例如：100
+    note: str | None = None  # 備註，例如：六甲國小大丘分班(已裁併校)
 
 
 class BuildingDetailCreate(BaseModel):
     building_number: str  # 建號，例如：歸仁北段6932建號
-    building_type: Optional[str] = None  # 建物種類，例如：市有建物
-    floor_area: Optional[str] = None  # 樓地板面積，例如：2樓:3729.7 3樓:3426.2
-    zone_type: Optional[str] = None  # 使用分區，例如：住宅區、商業區
-    land_use: Optional[str] = None  # 土地用途，例如：乙種建築用地
-    current_status: Optional[str] = None  # 現況，例如：空置、部分空置
-    vacancy_rate: Optional[int] = None  # 空置比例，例如：100
-    note: Optional[str] = None  # 備註，例如：2樓空置、3樓部分空間約400坪提供給使用
+    building_type: str | None = None  # 建物種類，例如：市有建物
+    floor_area: str | None = None  # 樓地板面積，例如：2樓:3729.7 3樓:3426.2
+    zone_type: str | None = None  # 使用分區，例如：住宅區、商業區
+    land_use: str | None = None  # 土地用途，例如：乙種建築用地
+    current_status: str | None = None  # 現況，例如：空置、部分空置
+    vacancy_rate: int | None = None  # 空置比例，例如：100
+    note: str | None = None  # 備註，例如：2樓空置、3樓部分空間約400坪提供給使用
 
 
 class BuildingLandDetailCreate(BaseModel):
     lot_number: str  # 地號，例如：80-8、81-1
-    land_type: Optional[str] = None  # 土地種類，例如：市有土地、國有土地
-    land_manager: Optional[str] = None  # 土地管理者，例如：臺南市政府
+    land_type: str | None = None  # 土地種類，例如：市有土地、國有土地
+    land_manager: str | None = None  # 土地管理者，例如：臺南市政府
 
 
 class AssetCreate(BaseModel):
@@ -43,14 +46,14 @@ class AssetCreate(BaseModel):
     agency_id: int  # 管理機關ID
     district_id: int  # 行政區ID
     section: str  # 地段，例如：大丘園段、田寮段
-    address: Optional[str] = None  # 地址，例如：錦仁區和平南街9號
-    coordinates: Optional[tuple[float, float]] = None  # 定位座標
-    area_coordinates: Optional[list[tuple[float, float]]] = None  # 區域座標組
-    target_name: Optional[str] = None  # 標的名稱，例如：歸仁市場2, 3樓
+    address: str | None = None  # 地址，例如：錦仁區和平南街9號
+    coordinates: tuple[float, float] | None = None  # 定位座標
+    area_coordinates: list[tuple[float, float]] | None = None  # 區域座標組
+    target_name: str | None = None  # 標的名稱，例如：歸仁市場2, 3樓
     status: str = "未活化"  # 狀態：已經活化、活化中、未活化
-    land_details: Optional[list[LandDetailCreate]] = None  # 土地明細列表
-    building_details: Optional[list[BuildingDetailCreate]] = None  # 建物明細列表
-    building_land_details: Optional[list[BuildingLandDetailCreate]] = None  # 建物土地明細列表
+    land_details: list[LandDetailCreate] | None = None  # 土地明細列表
+    building_details: list[BuildingDetailCreate] | None = None  # 建物明細列表
+    building_land_details: list[BuildingLandDetailCreate] | None = None  # 建物土地明細列表
 
 
 def init_router(supabase: Client) -> APIRouter:
