@@ -9,6 +9,7 @@ requires-python = "==3.12.7"
 dependencies = [
     "fastapi[standard]>=0.115.5",
     "passlib>=1.7.4",
+    "postgrest>=0.18.0",
     "supabase>=2.10.0",
 ]
 
