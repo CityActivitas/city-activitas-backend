@@ -2,9 +2,9 @@
 
 ### 新增閒置資產
 
-有註解: 
+有註解:
 
-```json
+```json5
 // POST /api/v1/idle/assets
 
 {
@@ -38,7 +38,7 @@
             "land_type": "市有土地",
             "area": 5000,
             "zone_type": "農業區",
-            "land_use": "特定目的事業用地", 
+            "land_use": "特定目的事業用地",
             "current_status": "空置",
             "vacancy_rate": 100,
             "note": "測試-農地"
@@ -81,7 +81,7 @@
             "land_type": "市有土地",
             "area": 5000,
             "zone_type": "農業區",
-            "land_use": "特定目的事業用地", 
+            "land_use": "特定目的事業用地",
             "current_status": "空置",
             "vacancy_rate": 100,
             "note": "測試-農地"
@@ -92,7 +92,7 @@
 
 更新測試:  **更新一定要有type標記是土地還是建物**
 
-``` json
+``` json5
 // PATCH /api/v1/idle/assets/{asset_id}
 
 {
@@ -110,9 +110,9 @@
 ```
 
 
-建物資產: 
+建物資產:
 
-```json
+```json5
 // POST /api/v1/idle/assets
 
 {
@@ -159,7 +159,7 @@
 
 更新建物資產:  **更新一定要有type標記是土地還是建物**
 
-```json
+```json5
 // PATCH /api/v1/idle/assets/{asset_id}
 
 {
@@ -185,7 +185,7 @@
 
 ### 新增案件
 
-```json
+```json5
 // 不帶資產的案件
 POST /api/v1/cases
 {

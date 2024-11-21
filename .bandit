@@ -1,0 +1,3 @@
+[bandit]
+targets: server
+exclude: tests

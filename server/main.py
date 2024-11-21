@@ -9,10 +9,7 @@ from routers import idle_assets, active_cases, activated_assets, auth, common, s
 
 load_dotenv()
 
-supabase: Client = create_client(
-    os.getenv("SUPABASE_URL"),
-    os.getenv("SUPABASE_ANON_KEY")
-)
+supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_ANON_KEY"))
 
 app = FastAPI()
 

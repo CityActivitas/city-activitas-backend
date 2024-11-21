@@ -274,9 +274,9 @@ CREATE TABLE activated_asset_demand_agencies (
 );
 
 -- 建立索引
-CREATE INDEX idx_activated_asset_demand_agencies_activated_asset_id 
+CREATE INDEX idx_activated_asset_demand_agencies_activated_asset_id
     ON activated_asset_demand_agencies(activated_asset_id);
-CREATE INDEX idx_activated_asset_demand_agencies_agency_id 
+CREATE INDEX idx_activated_asset_demand_agencies_agency_id
     ON activated_asset_demand_agencies(agency_id);
 
 -- 添加欄位註釋
@@ -538,6 +538,3 @@ COMMENT ON COLUMN case_tasks.start_date IS '開始執行時間';
 COMMENT ON COLUMN case_tasks.complete_date IS '實際完成時間';
 COMMENT ON COLUMN case_tasks.due_date IS '預期完成時間';
 COMMENT ON COLUMN case_tasks.note IS '備註';
-
-
-

@@ -1,21 +1,26 @@
 FROM python:3.12-slim
 
+ARG USERNAME=cityactivitas
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
+
+RUN apt-get update && \
+    apt-get install -y sqlite3=3.40.1-2+deb12u1 --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN useradd --create-home $USERNAME
+USER $USERNAME
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-  sqlite3 \
-  && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# create data directory
-RUN mkdir -p /app/data
+RUN pip install --no-cache-dir -r requirements.txt && \
+    mkdir -p /app/data
 
 COPY server /app/server
 
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 

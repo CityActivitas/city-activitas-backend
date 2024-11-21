@@ -105,34 +105,34 @@ INSERT INTO test_usage_types (id, name, note)
 SELECT id, name, note FROM usage_types;
 
 -- 2. 複製有外鍵依賴的表
-INSERT INTO test_assets 
+INSERT INTO test_assets
 SELECT * FROM assets;
 
-INSERT INTO test_land_details 
+INSERT INTO test_land_details
 SELECT * FROM land_details;
 
-INSERT INTO test_building_details 
+INSERT INTO test_building_details
 SELECT * FROM building_details;
 
-INSERT INTO test_building_land_details 
+INSERT INTO test_building_land_details
 SELECT * FROM building_land_details;
 
-INSERT INTO test_activated_assets 
+INSERT INTO test_activated_assets
 SELECT * FROM activated_assets;
 
-INSERT INTO test_activated_asset_demand_agencies 
+INSERT INTO test_activated_asset_demand_agencies
 SELECT * FROM activated_asset_demand_agencies;
 
-INSERT INTO test_activation_history 
+INSERT INTO test_activation_history
 SELECT * FROM activation_history;
 
-INSERT INTO test_asset_cases 
+INSERT INTO test_asset_cases
 SELECT * FROM asset_cases;
 
-INSERT INTO test_case_meeting_conclusions 
+INSERT INTO test_case_meeting_conclusions
 SELECT * FROM case_meeting_conclusions;
 
-INSERT INTO test_case_tasks 
+INSERT INTO test_case_tasks
 SELECT * FROM case_tasks;
 
 
@@ -154,7 +154,7 @@ COMMENT ON TABLE test_case_tasks IS 'test-案件任務表';
 
 
 CREATE OR REPLACE VIEW test_idle_assets_view AS
-SELECT 
+SELECT
     a.id,
     a.type AS "資產類型",
     a.target_name AS "標的名稱",
@@ -164,20 +164,20 @@ SELECT
     ag.name AS "管理機關",
     a.status AS "狀態",
     a.created_at AS "建立時間"
-FROM 
+FROM
     test_assets a
     LEFT JOIN test_districts d ON a.district_id = d.id
     LEFT JOIN test_agencies ag ON a.agency_id = ag.id
-WHERE 
+WHERE
     a.status = '未活化'
-ORDER BY 
+ORDER BY
     d.name,
     a.created_at DESC;
 
 
 
 CREATE OR REPLACE VIEW test_idle_land_assets_view AS
-SELECT 
+SELECT
     a.id AS "資產ID",
     d.name AS "行政區",
     a.target_name AS "標的名稱",
@@ -196,12 +196,12 @@ SELECT
     -- 資產狀態資訊
     a.status AS "狀態",
     a.created_at AS "建立時間"
-FROM 
+FROM
     test_assets a
     LEFT JOIN test_districts d ON a.district_id = d.id
     LEFT JOIN test_agencies ag ON a.agency_id = ag.id
     LEFT JOIN test_land_details ld ON a.id = ld.asset_id
-WHERE 
+WHERE
     a.status = '未活化'
     AND a.type = '土地'
     AND ld.deleted_at IS NULL  -- 排除已刪除的土地明細
@@ -214,7 +214,7 @@ ORDER BY
 
 
 CREATE OR REPLACE VIEW test_idle_building_assets AS
-SELECT 
+SELECT
     -- 資產基本資訊
     a.id AS "資產ID",
     a.target_name AS "標的名稱",
@@ -222,7 +222,7 @@ SELECT
     a.section AS "地段",
     a.address AS "地址",
     ag.name AS "管理機關",
-    
+
     -- 建物詳細資訊
     bd.building_number AS "建號",
     bd.building_type AS "建物類型",
@@ -232,26 +232,26 @@ SELECT
     bd.current_status AS "使用現況",
     bd.vacancy_rate AS "空置比例(%)",
     bd.note AS "建物備註",
-    
+
     -- 建物座落土地資訊
     STRING_AGG(DISTINCT bld.lot_number, ', ') AS "座落地號",
     STRING_AGG(DISTINCT bld.land_type, ', ') AS "土地類型",
     STRING_AGG(DISTINCT bld.land_manager, ', ') AS "土地管理者",
-    
+
     -- 資產狀態資訊
     a.status AS "活化狀態",
     a.created_at AS "建立時間"
-FROM 
+FROM
     test_assets a
     LEFT JOIN test_districts d ON a.district_id = d.id
     LEFT JOIN test_agencies ag ON a.agency_id = ag.id
     LEFT JOIN test_building_details bd ON a.id = bd.asset_id
     LEFT JOIN test_building_land_details bld ON a.id = bld.asset_id
-WHERE 
+WHERE
     a.status = '未活化'
     AND a.type = '建物'
     AND bd.deleted_at IS NULL  -- 排除已刪除的建物明細
-GROUP BY 
+GROUP BY
     a.id,
     a.target_name,
     d.name,
@@ -268,7 +268,7 @@ GROUP BY
     bd.note,
     a.status,
     a.created_at
-ORDER BY 
+ORDER BY
     a.id,
     d.name,                    -- 依行政區
     a.section,                 -- 依地段
@@ -276,7 +276,7 @@ ORDER BY
 
 
 CREATE OR REPLACE VIEW test_activated_assets_view AS
-SELECT 
+SELECT
     aa.id AS "活化ID",
     a.id AS "資產ID",
     d.name AS "行政區",
@@ -287,7 +287,7 @@ SELECT
     -- 活化資訊
     aa.year AS "活化年度",
     aa.location AS "地點說明",
-    CASE 
+    CASE
         WHEN aa.is_supplementary THEN '是'
         ELSE '否'
     END AS "是否補列",
@@ -299,7 +299,7 @@ SELECT
     aa.building_value AS "房屋課稅現值",
     aa.benefit_value AS "節流效益",
     -- 狀態資訊
-    CASE 
+    CASE
         WHEN aa.is_counted THEN '是'
         ELSE '否'
     END AS "列入計算",
@@ -307,7 +307,7 @@ SELECT
     TO_CHAR(aa.start_date, 'YYYY-MM-DD') AS "活化開始日期",
     TO_CHAR(aa.end_date, 'YYYY-MM-DD') AS "活化結束日期",
     aa.note AS "備註"
-FROM 
+FROM
     test_activated_assets aa
     LEFT JOIN test_assets a ON aa.asset_id = a.id
     LEFT JOIN test_districts d ON a.district_id = d.id
@@ -315,7 +315,7 @@ FROM
     LEFT JOIN test_usage_types ut ON aa.usage_type_id = ut.id
     LEFT JOIN test_activated_asset_demand_agencies aada ON aa.id = aada.activated_asset_id
     LEFT JOIN test_agencies da ON aada.agency_id = da.id
-GROUP BY 
+GROUP BY
     aa.id,
     a.id,
     d.name,
@@ -336,7 +336,7 @@ GROUP BY
     aa.start_date,
     aa.end_date,
     aa.note
-ORDER BY 
+ORDER BY
     aa.year ASC,
     aa.id,
     d.name,
@@ -345,7 +345,7 @@ ORDER BY
 
 
 CREATE OR REPLACE VIEW test_asset_cases_view AS
-SELECT 
+SELECT
     ac.id AS "案件ID",
     ac.name AS "案件名稱",
     -- 資產資訊
@@ -360,10 +360,10 @@ SELECT
     ac.status AS "案件狀態",
     -- 最新會議結論
     (
-        SELECT content 
-        FROM test_case_meeting_conclusions cmc 
-        WHERE cmc.case_id = ac.id 
-        ORDER BY meeting_date DESC 
+        SELECT content
+        FROM test_case_meeting_conclusions cmc
+        WHERE cmc.case_id = ac.id
+        ORDER BY meeting_date DESC
         LIMIT 1
     ) AS "最新會議結論",
     -- 任務統計
@@ -372,14 +372,14 @@ SELECT
     -- 時間資訊
     TO_CHAR(ac.created_at, 'YYYY-MM-DD') AS "建立時間",
     TO_CHAR(ac.updated_at, 'YYYY-MM-DD') AS "更新時間"
-FROM 
+FROM
     test_asset_cases ac
     LEFT JOIN test_assets a ON ac.asset_id = a.id
     LEFT JOIN test_districts d ON a.district_id = d.id
     LEFT JOIN test_agencies ag ON a.agency_id = ag.id
     LEFT JOIN test_usage_types ut ON ac.purpose_type_id = ut.id
     LEFT JOIN test_case_tasks ct ON ac.id = ct.case_id
-GROUP BY 
+GROUP BY
     ac.id,
     ac.name,
     a.type,
@@ -392,12 +392,12 @@ GROUP BY
     ac.status,
     ac.created_at,
     ac.updated_at
-ORDER BY 
+ORDER BY
     ac.created_at DESC;
 
 
 CREATE OR REPLACE VIEW test_case_tasks_view AS
-SELECT 
+SELECT
     -- 案件資訊
     ac.id AS "案件ID",
     ac.name AS "案件名稱",
@@ -418,19 +418,19 @@ SELECT
     ct.note AS "備註",
     -- 最新會議結論
     (
-        SELECT content 
-        FROM test_case_meeting_conclusions cmc 
-        WHERE cmc.case_id = ac.id 
-        ORDER BY meeting_date DESC 
+        SELECT content
+        FROM test_case_meeting_conclusions cmc
+        WHERE cmc.case_id = ac.id
+        ORDER BY meeting_date DESC
         LIMIT 1
     ) AS "最新會議結論"
-FROM 
+FROM
     test_case_tasks ct
     LEFT JOIN test_asset_cases ac ON ct.case_id = ac.id
     LEFT JOIN test_assets a ON ac.asset_id = a.id
     LEFT JOIN test_districts d ON a.district_id = d.id
     LEFT JOIN test_agencies ag ON ct.agency_id = ag.id
-ORDER BY 
+ORDER BY
     CASE ct.status
         WHEN '待處理' THEN 1
         WHEN '進行中' THEN 2
