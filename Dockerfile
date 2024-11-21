@@ -1,26 +1,29 @@
-FROM python:3.12-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+WORKDIR /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project --no-dev
+COPY . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
-ARG USERNAME=cityactivitas
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONFAULTHANDLER=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONPATH=/app
+FROM python:3.12-slim-bookworm
 
 RUN apt-get update && \
     apt-get install -y sqlite3=3.40.1-2+deb12u1 --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
-RUN useradd --create-home $USERNAME
-USER $USERNAME
+COPY --from=builder --chown=app:app /app /app
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/app/.venv/bin:$PATH"
+
 WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && \
-    mkdir -p /app/data
-
-COPY server /app/server
-
 
 EXPOSE 8000
 
