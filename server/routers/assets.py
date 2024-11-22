@@ -83,9 +83,9 @@ def init_router(supabase: Client) -> APIRouter:
             if asset.type is not None:
                 update_data["type"] = asset.type
             if asset.agency_id is not None:
-                update_data["agency_id"] = asset.agency_id
+                update_data["agency_id"] = asset.agency_id  # type: ignore
             if asset.district_id is not None:
-                update_data["district_id"] = asset.district_id
+                update_data["district_id"] = asset.district_id  # type: ignore
             if asset.section is not None:
                 update_data["section"] = asset.section
             if asset.address is not None:
@@ -181,9 +181,7 @@ def init_router(supabase: Client) -> APIRouter:
             update_data["updated_at"] = datetime.now().isoformat()
 
             # 3. 更新建物明細資料
-            (
-                supabase.table("test_building_details").update(update_data).eq("id", building_id).execute()
-            )
+            (supabase.table("test_building_details").update(update_data).eq("id", building_id).execute())
 
             return {"message": "建物明細更新成功", "building_id": building_id}
 
@@ -219,9 +217,7 @@ def init_router(supabase: Client) -> APIRouter:
             update_data["updated_at"] = datetime.now().isoformat()
 
             # 3. 更新建物土地關聯資料
-            (
-                supabase.table("test_building_land_details").update(update_data).eq("id", detail_id).execute()
-            )
+            (supabase.table("test_building_land_details").update(update_data).eq("id", detail_id).execute())
 
             return {"message": "建物土地關聯更新成功", "detail_id": detail_id}
 

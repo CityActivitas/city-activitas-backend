@@ -11,7 +11,10 @@ from server.routers import activated_assets, active_cases, assets, auth, common,
 
 load_dotenv()
 
-supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_ANON_KEY"))
+supabase: Client = create_client(
+    os.getenv("SUPABASE_URL", ""),
+    os.getenv("SUPABASE_ANON_KEY", ""),
+)
 
 app = FastAPI()
 

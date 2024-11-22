@@ -232,7 +232,7 @@ def init_router(supabase: Client) -> APIRouter:
 
                 # 新增建物土地詳細資料
                 if asset.building_land_details:
-                    for land_detail in asset.building_land_details:
+                    for land_detail in asset.building_land_details:  # type: ignore
                         land_data = land_detail.dict()
                         land_data["asset_id"] = asset_id
                         land_data["created_at"] = current_time
