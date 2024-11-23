@@ -1,0 +1,9 @@
+site_name: City Activitas Backend
+nav:
+  - Home: README.md
+  - Contributing: contributing.md
+theme:
+  name: "material"
+repo_url: city-activitas-backend
+remote_branch: gh-pages
+remote_name: origin

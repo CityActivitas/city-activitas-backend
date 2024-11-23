@@ -1,6 +1,6 @@
-INSERT INTO assets 
+INSERT INTO assets
 (id, type, agency_id, district_id, section, address, coordinates, area_coordinates, target_name, status, created_at)
-VALUES 
+VALUES
     (22, '建物', 27, 27, '歸仁北段', '錦仁區和平南街9號', NULL, NULL, '歸仁市場2, 3樓', '未活化', '2024-11-05 07:45:16.031803'),
     (23, '建物', 2, 16, '馬沙溝段', '將軍區長沙里沙126-5號', NULL, NULL, '將軍馬沙溝安檢所', '未活化', '2024-11-05 07:45:16.031803'),
     (24, '建物', 2, 13, '下山子寮段', '七股區鹽埕里鹽埕237-10號', NULL, NULL, '七股區鹽埕安檢所', '未活化', '2024-11-05 07:45:16.031803'),
@@ -23,7 +23,7 @@ VALUES
     (41, '建物', 2, 15, '成功段', '西港區劉厝里劉厝63號', NULL, NULL, NULL, '未活化', '2024-11-05 07:45:16.031803');
 
 
-INSERT INTO building_land_details 
+INSERT INTO building_land_details
 (asset_id, lot_number, land_type, land_manager, created_at, updated_at)
 VALUES
     (22, '1043-44', '市有土地', NULL, NOW(), NOW()),
@@ -68,7 +68,7 @@ VALUES
     (41, '474', '國有土地', NULL, NOW(), NOW()),
     (41, '475', '私有土地', NULL, NOW(), NOW());
 
-INSERT INTO building_details 
+INSERT INTO building_details
 (asset_id, building_number, building_type, floor_area, zone_type, land_use, current_status, vacancy_rate, note, created_at, updated_at)
 VALUES
     (22, '歸仁北段6932建號', '市有建物', '2樓:3729.7 3樓:3426.2', '市場用地', '市場用地', '空置', NULL, '2樓空置、3樓部分空間約400坪提供給使用、其餘空置(約600坪)', NOW(), NOW()),

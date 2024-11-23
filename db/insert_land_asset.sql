@@ -44,8 +44,8 @@ INSERT INTO assets (type, agency_id, district_id, section, status) VALUES
 
 
 -- 基於上述已經塞入的資料(asset_id), 進行資料的更新
-INSERT INTO land_details 
-(asset_id, lot_number, land_type, area, zone_type, land_use, current_status, vacancy_rate, note) 
+INSERT INTO land_details
+(asset_id, lot_number, land_type, area, zone_type, land_use, current_status, vacancy_rate, note)
 VALUES
     -- A1 (六甲國小大丘分班)
     (1, '80-8', '市有土地', 7826, '學校用地、保護區', NULL, '空置', 100, '六甲國小大丘分班(已裁併校)'),
@@ -138,20 +138,20 @@ VALUES
     (21, '446', '市有土地', 2293.52, '零售市場用地', NULL, '空置', 100, '雜木、綠地');
 
 
--- -- 後來加上 created_at, updated_at, deleted_at 
+-- -- 後來加上 created_at, updated_at, deleted_at
 -- -- 1. 新增欄位
--- ALTER TABLE land_details 
+-- ALTER TABLE land_details
 -- ADD COLUMN created_at TIMESTAMP,
 -- ADD COLUMN updated_at TIMESTAMP,
 -- ADD COLUMN deleted_at TIMESTAMP;
 
 -- -- 2. 設定預設值
--- UPDATE land_details 
+-- UPDATE land_details
 -- SET created_at = NOW(),
 --     updated_at = NOW();
 
 -- -- 3. 設定 NOT NULL 約束和預設值
--- ALTER TABLE land_details 
+-- ALTER TABLE land_details
 -- ALTER COLUMN created_at SET NOT NULL,
 -- ALTER COLUMN created_at SET DEFAULT NOW(),
 -- ALTER COLUMN updated_at SET NOT NULL,

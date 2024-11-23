@@ -1,17 +1,19 @@
+from __future__ import annotations
+
+import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-from supabase import create_client, Client
-import os
-from datetime import datetime
+from supabase import Client, create_client
 
-from routers import idle_assets, active_cases, activated_assets, auth, common, system, assets
+from server.routers import activated_assets, active_cases, assets, auth, common, idle_assets, system
 
 load_dotenv()
 
 supabase: Client = create_client(
-    os.getenv("SUPABASE_URL"),
-    os.getenv("SUPABASE_ANON_KEY")
+    os.getenv("SUPABASE_URL", ""),
+    os.getenv("SUPABASE_ANON_KEY", ""),
 )
 
 app = FastAPI()

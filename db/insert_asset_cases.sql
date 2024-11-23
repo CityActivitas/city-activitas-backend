@@ -6,10 +6,10 @@ INSERT INTO usage_types (name) VALUES
 ON CONFLICT (name) DO NOTHING;
 
 -- 插入案件資料
-INSERT INTO asset_cases 
-(name, purpose, purpose_type_id, status) 
+INSERT INTO asset_cases
+(name, purpose, purpose_type_id, status)
 VALUES
-('臺南市玉井游泳池', 
+('臺南市玉井游泳池',
  '臺南市玉井游泳池',
  (SELECT id FROM usage_types WHERE name = '遊憩與體育設施'),
  '核准經費中'),
@@ -236,7 +236,7 @@ VALUES
 
 
  -- 插入案件會議結論
-INSERT INTO case_meeting_conclusions 
+INSERT INTO case_meeting_conclusions
 (case_id, meeting_date, content)
 VALUES
 (1, '2023-11-23', '1. 玉井游泳池原室內空間： (1)後續發包修繕請公所評估放置體健設施作為地方活動空間之可行性，並請體育局協助相關經費。 (2)耐震評估及補強相關經費請工務局協助。 2. 玉井體育公園：請玉井區公所注意後續維護管理，避免雜草叢生，經費部分請體育局協助，並儘速辦理。'),
@@ -351,33 +351,33 @@ VALUES
 
 -- insert case tasks
 -- 插入案件任務資料
-INSERT INTO case_tasks 
+INSERT INTO case_tasks
 (case_id, agency_id, task_content, status, start_date, complete_date, due_date, note, created_at)
 WITH agency_lookup AS (
   SELECT id, name FROM agencies
 )
-SELECT 
+SELECT
   t.案號 as case_id,
-  a.id as agency_id, 
+  a.id as agency_id,
   t.任務內容 as task_content,
   t.進度 as status,
-  CASE 
-    WHEN t.實際開始時間 ~ '^\d{4}/\d{1,2}/\d{1,2}$' 
+  CASE
+    WHEN t.實際開始時間 ~ '^\d{4}/\d{1,2}/\d{1,2}$'
     THEN to_date(t.實際開始時間, 'YYYY/MM/DD')
     ELSE NULL
   END as start_date,
-  CASE 
+  CASE
     WHEN t.實際完成時間 ~ '^\d{4}/\d{1,2}/\d{1,2}$'
     THEN to_date(t.實際完成時間, 'YYYY/MM/DD')
     ELSE NULL
   END as complete_date,
-  CASE 
+  CASE
     WHEN t.預計完成時間 ~ '^\d{4}/\d{1,2}/\d{1,2}$'
     THEN to_date(t.預計完成時間, 'YYYY/MM/DD')
     ELSE NULL
   END as due_date,
   t.執行細節 as note,
-  CASE 
+  CASE
     WHEN t.新增時間 ~ '^\d{4}/\d{1,2}/\d{1,2}$'
     THEN to_date(t.新增時間, 'YYYY/MM/DD')
     ELSE CURRENT_DATE
@@ -471,4 +471,3 @@ FROM (
     (45, '工務局', '112.11.23會議後新增列管案件', '', '已完成', NULL, NULL, NULL, '2023/11/23')
 ) AS t (案號, 執行機關, 任務內容, 執行細節, 進度, 實際開始時間, 實際完成時間, 預計完成時間, 新增時間)
 JOIN agency_lookup a ON a.name = t.執行機關;
-
