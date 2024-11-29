@@ -18,7 +18,9 @@ app = FastAPI()
 
 # 設定 CORS
 origins = [
+    "http://localhost:3001",  # React / Next.js
     "http://localhost:3000",  # React / Next.js
+    "https://city-activitas.vercel.app"
 ]
 
 app.add_middleware(
